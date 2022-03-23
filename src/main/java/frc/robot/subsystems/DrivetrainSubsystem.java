@@ -38,26 +38,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
     WPI_TalonFX[] driveMotors = {
-      new WPI_TalonFX(1),
-      new WPI_TalonFX(2),
-      new WPI_TalonFX(4),
-      new WPI_TalonFX(3)
+      new WPI_TalonFX(4), //
+      new WPI_TalonFX(3),//
+      new WPI_TalonFX(1),//
+      new WPI_TalonFX(2)//
     };
-    driveMotors[0].setNeutralMode(NeutralMode.Brake);
-    driveMotors[1].setNeutralMode(NeutralMode.Brake);
-    driveMotors[2].setNeutralMode(NeutralMode.Brake);
-    driveMotors[3].setNeutralMode(NeutralMode.Brake);
+    driveMotors[0].setNeutralMode(NeutralMode.Coast);
+    driveMotors[1].setNeutralMode(NeutralMode.Coast);
+    driveMotors[2].setNeutralMode(NeutralMode.Coast);
+    driveMotors[3].setNeutralMode(NeutralMode.Coast);
     leftMotors = new MotorControllerGroup(driveMotors[0], driveMotors[1]);
     rightMotors = new MotorControllerGroup(driveMotors[2], driveMotors[3]);
-    rightMotors.setInverted(true);
-    
+    leftMotors.setInverted(true);
+
     drive = new DifferentialDrive(leftMotors, rightMotors); // Initialize Differential Drive
     rightEncoder = new Encoder(2, 3, true);
-    leftEncoder = new Encoder(0, 1, false); 
+    leftEncoder = new Encoder(0, 1, false);
     leftEncoder.setDistancePerPulse(2*3.14*(.1524/2)/2048);
     rightEncoder.setDistancePerPulse(2*3.14*(.1524/2)/2048);
     resetEncoders();
-    odometry = new DifferentialDriveOdometry(gyro.getRotation2d()); 
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
   }
 
   @Override
@@ -67,6 +67,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance());
     SmartDashboard.putNumber("left", leftEncoder.getDistance());
     SmartDashboard.putNumber("right", rightEncoder.getDistance());
+    SmartDashboard.putNumber("gyro", gyro.getRotation2d().getDegrees() % 360);
   }
 
   public Pose2d getPose() {
